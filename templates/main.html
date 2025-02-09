@@ -1,0 +1,38 @@
+
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Sistema privado de Victor">
+    <meta name="generator" content="HELIO3AO">
+    <title>VSniper - {% block title %}{% endblock %}</title>
+    
+
+    <!-- Bootstrap core CSS -->
+<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Favicons -->
+<link rel="shortcut icon" href="/static/img/robo.png" type="image/x-icon">
+<meta name="theme-color" content="#7952b3">
+
+
+    <style>
+        html,
+        body {
+        height: 100%;
+        }
+    </style>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    
+    {% block head %}{% endblock %}
+
+  </head>
+  <body>
+    
+    {% block content %}{% endblock %}
+
+  </body>
+</html>

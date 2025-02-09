@@ -1,0 +1,80 @@
+{% extends 'main-user.html' %}
+
+{% block title %}Monitora{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-start flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Monitor</h1>
+    </div>
+
+
+    <div class="mt-2 mb-4">
+        <h6>Monitore alguns pares para ver qual o melhor para botar no Setup</h6>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <div class="alert alert-warning">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <form class="my-3 d-xl-flex d-md-flex d-xxl-flex" method="post">
+        <select name="exchange1" id="" class="form-select">
+            {% for name in exchanges %}
+                <option value="{{ name }}">{{ name }}</option>
+            {% endfor %}
+        </select>&nbsp;&nbsp;
+        <select name="exchange2" id="" class="form-select">
+            {% for name in exchanges[::-1] %}
+                <option value="{{ name }}">{{ name }}</option>
+            {% endfor %}
+        </select>&nbsp;&nbsp;
+        <select name="par" id="" class="form-select">
+            <option value="BTCUSDT">BTC-USDT</option>
+        </select>&nbsp;&nbsp;
+        <input class="form-control" type="number" step="0.01" name="oportunidade" id="oportunidade" placeholder="0.5%" min="0.01" required>
+        <button type="submit" class="btn btn-outline-danger mx-xl-2 mx-md-2 mx-xxl-2 mt-1">Salvar</button>
+    </form>
+
+    <hr class="my-3">
+
+    <div class="table-responsive mb-2">
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Exchange1</th>
+                <th scope="col">Exchange2</th>
+                <th scope="col">Par</th>
+                <th scope="col">Oport.(%)</th>
+                <th scope="col">N. Oport.</th>
+                <th scope="col">Data(UTC-0)</th>
+                <th scope="col">Del</th>
+              </tr>
+            </thead>
+            <tbody>
+                    {% for monitor in monitores %}
+                        <tr>
+                            <td>{{ monitor.id }}</td>
+                            <td>{{ monitor.exchange1 }}</td>
+                            <td>{{ monitor.exchange2 }}</td>
+                            <td>{{ monitor.par }}</td>
+                            <td>{{ monitor.oportunidade }}</td>
+                            <td>{{ monitor.n_oportunidade }}</td>
+                            <td>{{ monitor.created_at.strftime("%H:%M %d-%m-%Y") }}</td>
+                            <td><a href="?del={{ monitor.id }}" class="text-danger">x</a></td>
+                        </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        // buscar todos pares que tem nas 2 correctoras: /pares?exchange1={}&exchange2={}
+    </script>
+{% endblock %}
+
+

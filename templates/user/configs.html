@@ -1,0 +1,126 @@
+{% extends 'main-user.html' %}
+
+{% block title %}Monitora{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-start flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Configurações</h1>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% for message in messages %}
+        <div class="alert alert-warning">{{ message }}</div>
+    {% endfor %}
+    {% endwith %}
+
+    <!-- configuracoes -->
+    <form class="mb-2" method="post">
+        <div class="border p-2 rounded my-1">
+            <h3>Binance</h3>
+            <hr class="my-1">
+
+            <div class="mb-3">
+            <label for="api_token_binance" class="form-label">API Key</label>
+                <input type="text" class="form-control" name="api_token_binance" id="api_token_binance" aria-describedby="apiKeyBinance" value="{{datas['Binance'][0]}}">
+                <div id="apiKeyBinance" class="form-text">Certifique deixar o <b>Enable Spot & Margin trading</b> ativado.</div>
+            </div>
+            <div class="mb-3">
+                <label for="api_secret_binance" class="form-label">API Secret</label>
+                <input type="text" class="form-control" name="api_secret_binance" id="api_secret_binance" value="{{datas['Binance'][1]}}">
+            </div>
+        </div>
+
+        <div class="border p-2 rounded my-1">
+            <h3>BingX</h3>
+            <hr class="my-1">
+
+            <div class="mb-3">
+            <label for="api_token_bingx" class="form-label">API Key</label>
+                <input type="text" class="form-control" name="api_token_bingx" id="api_token_bingx" aria-describedby="apiKeyBingX" value="{{datas['BingX'][0]}}">
+                <div id="apiKeyBingX" class="form-text">Certifique deixar o <b>Enable Spot trading</b> ativado.</div>
+            </div>
+            <div class="mb-3">
+                <label for="api_secret_binance" class="form-label">API Secret</label>
+                <input type="text" class="form-control" name="api_secret_bingx" id="api_secret_binance" value="{{datas['BingX'][1]}}">
+            </div>
+        </div>
+
+        <div class="border p-2 rounded my-1">
+            <h3>Bitget</h3>
+            <hr class="my-1">
+
+            <div class="mb-3">
+            <label for="api_token_bitget" class="form-label">API Key</label>
+                <input type="text" class="form-control" name="api_token_bitget" id="api_token_bitget" aria-describedby="apiKeyBitget" value="{{datas['Bitget'][0]}}">
+                <div id="apiKeyBitget" class="form-text">Certifique deixar o <b>Enable Spot trading</b> ativado.</div>
+            </div>
+            <div class="mb-3">
+                <label for="api_secret_bitget" class="form-label">API Secret</label>
+                <input type="text" class="form-control" name="api_secret_bitget" id="api_secret_bitget" value="{{datas['Bitget'][1]}}">
+            </div>
+        </div>
+
+        <div class="border p-2 rounded my-1">
+            <h3>Bitrue</h3>
+            <hr class="my-1">
+
+            <div class="mb-3">
+            <label for="api_token_bitrue" class="form-label">API Key</label>
+                <input type="text" class="form-control" name="api_token_bitrue" id="api_token_bitrue" aria-describedby="apiKeyBitrue" value="{{datas['Bitrue'][0]}}">
+                <div id="apiKeyBitrue" class="form-text">Certifique deixar o <b>Enable Spot trading</b> ativado.</div>
+            </div>
+            <div class="mb-3">
+                <label for="api_secret_bitrue" class="form-label">API Secret</label>
+                <input type="text" class="form-control" name="api_secret_bitrue" id="api_secret_bitrue" value="{{datas['Bitrue'][1]}}">
+            </div>
+        </div>
+
+        <div class="border p-2 rounded my-1">
+            <h3>Mercado Bitcoin</h3>
+            <hr class="my-1">
+
+            <div class="mb-3">
+            <label for="api_token_mb" class="form-label">API Key</label>
+                <input type="text" class="form-control" name="api_token_mb" id="api_token_mb" aria-describedby="apiKeyMB" value="{{datas['Mercado Bitcoin'][0]}}">
+                <div id="apiKeyMB" class="form-text">Certifique deixar o <b>Enable Spot trading</b> ativado.</div>
+            </div>
+            <div class="mb-3">
+                <label for="api_secret_mb" class="form-label">API Secret</label>
+                <input type="text" class="form-control" name="api_secret_mb" id="api_secret_mb" value="{{datas['Mercado Bitcoin'][1]}}">
+            </div>
+        </div>
+
+        <div class="border p-2 rounded my-1">
+            <h3>MEXC</h3>
+            <hr class="my-1">
+
+            <div class="mb-3">
+            <label for="api_token_mexc" class="form-label">API Key</label>
+                <input type="text" class="form-control" name="api_token_mexc" id="api_token_mexc" aria-describedby="apiKeyMEXC" value="{{datas['MEXC'][0]}}">
+                <div id="apiKeyMEXC" class="form-text">Certifique deixar o <b>Enable Spot trading</b> ativado.</div>
+            </div>
+            <div class="mb-3">
+                <label for="api_secret_mexc" class="form-label">API Secret</label>
+                <input type="text" class="form-control" name="api_secret_mexc" id="api_secret_mexc" value="{{datas['MEXC'][1]}}">
+            </div>
+        </div>
+
+        <div class="border p-2 rounded my-1">
+            <h3>OKX</h3>
+            <hr class="my-1">
+
+            <div class="mb-3">
+            <label for="api_token_okx" class="form-label">API Key</label>
+                <input type="text" class="form-control" name="api_token_okx" id="api_token_okx" aria-describedby="apiKeyOkx" value="{{datas['OKX'][0]}}">
+                <div id="apiKeyOkx" class="form-text">Certifique deixar o <b>Enable Spot trading</b> ativado.</div>
+            </div>
+            <div class="mb-3">
+                <label for="api_secret_okx" class="form-label">API Secret</label>
+                <input type="text" class="form-control" name="api_secret_okx" id="api_secret_okx" value="{{datas['OKX'][1]}}">
+            </div>
+        </div>
+
+
+        <button type="submit" class="btn btn-success mt-2">Salvar</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,25 @@
+TITULO: Arbritagem Em Cryptomoedas
+ORÇAMENTO: 350 USDT
+
+Consegui colocar o monitor de preços nas seguintes Cexs:
+MERCADO BITCOIN - monitor
+BITTRUE - monitor
+OKX - monitor
+BINGX - monitor
+MEXC - monitor
+BITGET - monitor
+BINANCE - monitor
+
+Estas, uma ta bloqueio de IP e a outra nao tem uma boa documentacao na API:
+RIPPIO
+FOX BIT
+
+SOBRE:
+Detecção de oportunidades de arbitragem considerando todas as taxas envolvidas.
+Execução automatizada de todo o ciclo de arbitragem: compra, transferência e venda.
+Cálculo Detalhado e Informações de Lucro:
+
+
+BINANCE:
+        self.api_key = 'Kjqrs6Kxd20keAmSf77V7BbmqPmIdBivyeTwjDlW9NJdQ0CJROujeaBhDyfNBOib'
+        self.api_secret = 'YEnp0SncG8s1sQneCV0vR5QLl2jleJX54NES1DTaTuBeX4rehHk4MRCGY4o4Neb6'

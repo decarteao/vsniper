@@ -1,0 +1,6 @@
+websocket-client==1.6.0
+requests
+python-binance
+flask
+flask-login
+flask-alchemy
