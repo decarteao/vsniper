@@ -1,6 +1,7 @@
-websocket-client==1.6.0
-requests
-python-binance
-flask
-flask-login
-flask-sqlalchemy
+websocket-client==1.8.0
+requests==2.32.3
+python-binance==1.0.27
+Flask==2.2.5
+Flask-Classful==0.16.0
+Flask-Login==0.6.3
+Flask-SQLAlchemy==2.5.1
