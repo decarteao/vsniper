@@ -1,0 +1,18 @@
+BOTEI OS MONITORES
+CRIAR OS MAKERS: abrir uma posicao, consultar saldo, listar moedas validas(com suas taxas)
+CRIAR A PARTE WEB:
+    - PAGINA DE LOGIN
+    - INDEX
+        - SECCAO QUE MOSTRA QUANTAS SETUPS FORAM CRIADOS
+        - SECCAO DE HISTORICO DE COMPRA E VENDA
+    - CONFIGURACOES(SETAR AS APIS DE CADA CASA, COM UM CHANNEL NO TELEGRAM)
+    - PAGINA DE SETUP DOS PARES(BTN DE CRIAR(ABRE UM MODAL), TABELA(id, exchange1, exchange2, par, qntyBase, oportudade(%), data_criada, n. operacoes, max_operacoes, del))
+        - MODAL do Setup:
+            - Exchange1
+            - Par(igual ao do Exchange2)
+            = Exchange2
+            - Par(igual ao do Exchange1)
+            - Quantidade da moeda base(exemplo: BTCUUSDT, base: USDT)
+            - Percentagem de diferença(1%)
+            - Maximo de operacoes
+
