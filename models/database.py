@@ -26,8 +26,7 @@ class Monitor(db.Model):
     exchange1 = db.Column(db.String(100))
     exchange2 = db.Column(db.String(100))
     par = db.Column(db.String(100), default='')
-    oportunidade = db.Column(db.Float, default=0.01)
-    n_oportunidade = db.Column(db.Integer, default=0)
+    spread = db.Column(db.Float, default=0.01) # spread minimo
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 

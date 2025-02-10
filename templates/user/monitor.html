@@ -19,61 +19,164 @@
     {% endwith %}
 
     <form class="my-3 d-xl-flex d-md-flex d-xxl-flex" method="post">
-        <select name="exchange1" id="" class="form-select">
-            {% for name in exchanges %}
-                <option value="{{ name }}">{{ name }}</option>
-            {% endfor %}
+        <input class="form-control" type="text" name="par" id="par" placeholder="BTC-USDT" required>
         </select>&nbsp;&nbsp;
-        <select name="exchange2" id="" class="form-select">
-            {% for name in exchanges[::-1] %}
-                <option value="{{ name }}">{{ name }}</option>
-            {% endfor %}
-        </select>&nbsp;&nbsp;
-        <select name="par" id="" class="form-select">
-            <option value="BTCUSDT">BTC-USDT</option>
-        </select>&nbsp;&nbsp;
-        <input class="form-control" type="number" step="0.01" name="oportunidade" id="oportunidade" placeholder="0.5%" min="0.01" required>
+        <input class="form-control" type="number" step="0.01" name="spread" id="spread" placeholder="Spread mínimo 0.5%" min="0.1" required>
         <button type="submit" class="btn btn-outline-danger mx-xl-2 mx-md-2 mx-xxl-2 mt-1">Salvar</button>
     </form>
 
+    <!-- Button trigger modal -->
+    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCalculadoraLabel">
+        Launch demo modal
+    </button> -->
+
     <hr class="my-3">
 
-    <div class="table-responsive mb-2">
-        <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Exchange1</th>
-                <th scope="col">Exchange2</th>
-                <th scope="col">Par</th>
-                <th scope="col">Oport.(%)</th>
-                <th scope="col">N. Oport.</th>
-                <th scope="col">Data(UTC-0)</th>
-                <th scope="col">Del</th>
-              </tr>
-            </thead>
-            <tbody>
-                    {% for monitor in monitores %}
-                        <tr>
-                            <td>{{ monitor.id }}</td>
-                            <td>{{ monitor.exchange1 }}</td>
-                            <td>{{ monitor.exchange2 }}</td>
-                            <td>{{ monitor.par }}</td>
-                            <td>{{ monitor.oportunidade }}</td>
-                            <td>{{ monitor.n_oportunidade }}</td>
-                            <td>{{ monitor.created_at.strftime("%H:%M %d-%m-%Y") }}</td>
-                            <td><a href="?del={{ monitor.id }}" class="text-danger">x</a></td>
-                        </tr>
-                    {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    {% for i in range(0, row_monitores, 4) %}
+        <div class="d-xl-flex d-md-flex d-xxl-flex mb-2">
+            {% for monitor in monitores[i:i+4] %}
+                <div class="card monitor" style="width: 18rem;" monitorid="{{ monitor.id }}" par="{{ monitor.par }}" exchanges="{{ monitor.exchange1 }}_{{ monitor.exchange2 }}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <h5 class="card-title text-light">{{ monitor.par }}</h5>
+                            <h5 class="card-title text-light">
+                                <img src="/static/img/exchanges/{{ monitor.exchange1 }}.ico" alt="{{ monitor.exchange1 }}" width="30" height="30">
+                                <span>&#9658;</span>
+                                <img src="/static/img/exchanges/{{ monitor.exchange2 }}.ico" alt="{{ monitor.exchange2 }}" width="30" height="30">
+                            </h5>
+                        </div>
+                        <div class="card-title" style="display: flex; flex-direction: column; justify-content: end;">
+                            <h6 class="text-light price">{{ monitor.exchange1.capitalize() }}: <span class="text-danger" id="status_exchange_1">-</span></h6>
+                            <h6 class="text-light price">{{ monitor.exchange2.capitalize() }}: <span class="text-success" id="status_exchange_2">-</span></h6>
+                            <hr class="my-1">
+                            <h6 class="text-light price">{{ monitor.exchange1.capitalize() }}: <span class="" id="book_price_exchange_1">0.</span> {{ monitor.par.split('-')[1] }}(Vol: <span class="" id="book_vol_exchange_1">0</span> {{ monitor.par.split('-')[0] }})</h6>
+                            <h6 class="text-light price">{{ monitor.exchange2.capitalize() }}: <span class="" id="book_price_exchange_2">0</span> {{ monitor.par.split('-')[1] }}(Vol: <span class="" id="book_vol_exchange_2">0</span> {{ monitor.par.split('-')[0] }})</h6>
+                            <h6 class="text-light price">Spread mínimo: <span class="">{{ monitor.spread }}%</span></h6>
+                            <hr class="my-1">
+                            <div class="bg-dark d-flex justify-content-center py-1">
+                                <span class="text-light">Spread: <span id="current_spread">0</span>%</span>
+                            </div>
+                        </div>
+                        <div class="d-flex mt-3">
+                            <a href="?del={{ monitor.id }}" class="btn btn-outline-danger">&#x2715;</a>&nbsp;&nbsp;
+                            <button type="button" class="btn btn-success">
+                                <svg fill="#fff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                    width="15px" height="15px" viewBox="0 0 403.475 403.475"
+                                    xml:space="preserve">
+                                <g>
+                                    <path d="M374.237,172.5c0-95.117-77.383-172.5-172.5-172.5s-172.5,77.383-172.5,172.5c0,56.08,27.084,108.311,72.689,140.699
+                                        c0.834,8.939,4.465,17.356,10.541,24.197l38.226,43.035c0.385,0.434,0.784,0.852,1.197,1.258
+                                        c10.26,10.049,29.396,21.785,49.559,21.785h37.636c16.22,0,31.597-5.77,43.3-16.244c12.3-11.01,19.354-26.486,19.354-42.461
+                                        l-0.014-31.703C347.206,280.672,374.237,228.455,374.237,172.5z M239.083,378.475h-37.635c-11.272,0-24.383-7.121-32.064-14.646
+                                        l-38.225-43.033c-6.425-7.234-5.771-18.309,1.465-24.734c3.338-2.965,7.491-4.423,11.63-4.423c4.833,0,9.644,1.989,13.105,5.886
+                                        l6.202,6.981v-79.058c0-9.676,7.844-17.521,17.521-17.521c9.677,0,17.521,7.846,17.521,17.521v40.984
+                                        c2.615-1.552,5.657-2.459,8.919-2.459c7.436,0,13.775,4.641,16.318,11.178c2.723-1.746,5.953-2.77,9.426-2.77
+                                        c8.561,0,15.677,6.143,17.207,14.257c2.571-1.481,5.545-2.341,8.726-2.341c9.676,0,17.521,7.845,17.521,17.521l0.017,42.951
+                                        C276.737,363.385,259.88,378.475,239.083,378.475z M297.943,284.3c-6.196-13.651-19.405-23.474-35.002-24.84
+                                        c-7.724-7.524-18.252-12.079-29.675-12.079c-0.123,0-0.246,0-0.37,0.001c-0.353-0.263-0.71-0.521-1.071-0.772
+                                        c-2.592-1.809-5.347-3.31-8.223-4.486v-16.676c0-23.446-19.075-42.521-42.521-42.521c-23.446,0-42.521,19.075-42.521,42.521v41.572
+                                        c-8.333,1.125-16.18,4.7-22.538,10.348c-3.066,2.724-5.676,5.824-7.8,9.201C74.184,258.66,54.237,216.996,54.237,172.5
+                                        c0-81.332,66.168-147.5,147.5-147.5s147.5,66.168,147.5,147.5C349.237,215.77,330.328,256.425,297.943,284.3z"/>
+                                </g>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>&nbsp;&nbsp;
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% endblock %}
 
+<!-- modal para calcular o lucro -->
+{% block modal %}
+<div class="modal fade" id="modalCalculadoraLabel" tabindex="-99999" aria-labelledby="modalCalculadoraLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalCalculadoraLabel">Calculadora de Lucro</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="" method="post">
+            <h6>BTC-USDT</h6>
+            <select name="exchange1" id="exchange1" class="form-select mb-1">
+                <option value="01">0.001 (Volume: 104.5) - Compra</option>
+            </select>
+            <select name="exchange2" id="exchange2" class="form-select my-2">
+                <option value="01">0.001 (Volume: 104.5) - Venda</option>
+            </select>
+            <div class="my-1">
+                <img src="/static/img/exchanges/binance.ico" width="30" height="30" alt="binance" title="binance"> >> <img src="/static/img/exchanges/bitget.ico" width="30" height="30" alt="bitget" title="bitget">
+            </div>
+            <span>Taxas totais: 0.8% + 0.45 USDT</span>
+            <div class="my-1">
+                <input type="number" class="form-control" placeholder="Valor base a negociar(eg. BTC-USDT => USDT)" min="0.000001">
+            </div>
+            <div class="my-1">
+                <label for="lucro">Possíveis ganhos:</label>
+                <input type="number" name="lucro" id="lucro" class="form-control" placeholder="0 USDT" readonly>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success">Executar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
 
 {% block scripts %}
     <script>
-        // buscar todos pares que tem nas 2 correctoras: /pares?exchange1={}&exchange2={}
+        function updateMonitores(){
+            $.ajax({
+                url: '/api/oportunity',
+                method: 'GET',
+                success: function(data){
+                    for(i = 0; i < data.length; i++){
+                        row = data[i]
+                        _id = row['id']
+
+                        status_exchange_1 = $(`div[monitorid="${_id}"] span#status_exchange_1`)
+                        status_exchange_2 = $(`div[monitorid="${_id}"] span#status_exchange_2`)
+
+                        status_exchange_1.text(row['exch1'])
+                        status_exchange_2.text(row['exch2'])
+
+                        if(row['exch1'] == 'NADA'){
+                            status_exchange_1.prop('class', 'text-light')
+                        }else if(row['exch1'] == 'COMPRA'){
+                            status_exchange_1.prop('class', 'text-success')
+                        }else{
+                            status_exchange_1.prop('class', 'text-danger')
+                        }
+
+                        if(row['exch2'] == 'NADA'){
+                            status_exchange_2.prop('class', 'text-light')
+                        }else if(row['exch2'] == 'COMPRA'){
+                            status_exchange_2.prop('class', 'text-success')
+                        }else{
+                            status_exchange_2.prop('class', 'text-danger')
+                        }
+
+                        // prices
+                        $(`div[monitorid="${_id}"] span#book_price_exchange_1`).text(row['exch1_price'][0])
+                        $(`div[monitorid="${_id}"] span#book_price_exchange_2`).text(row['exch2_price'][0])
+
+                        // volumes
+                        $(`div[monitorid="${_id}"] span#book_vol_exchange_1`).text(row['exch1_price'][1])
+                        $(`div[monitorid="${_id}"] span#book_vol_exchange_2`).text(row['exch2_price'][1])
+
+                        // spread
+                        $(`div[monitorid="${_id}"] span#current_spread`).text(row['best_spread'])
+                    }
+                }
+            })
+        }
+
+        setInterval(updateMonitores, 700);
+        updateMonitores();
     </script>
 {% endblock %}
 

@@ -1,4 +1,5 @@
 
+from threading import Thread
 from websocket import WebSocketApp
 from string import ascii_letters
 from random import randint
@@ -21,10 +22,14 @@ class Binance:
     def __init__(self):
         self.session = Session()
         self.base_url = 'https://api.binance.com'
-        self.client = Client(self.api_key, self.api_secret)
+        self.api_key = None
+        self.api_secret = None
+        self.client = Client()
+        self.pares = []
     def update_api(self, api_key: str, api_secret: str):
         self.api_key = api_key
         self.api_secret = api_secret
+        self.client = Client(self.api_key, self.api_secret)
     def get_info_pair(self, symbol: str):
         url = self.base_url + '/api/v3/exchangeInfo?symbol=' + symbol.strip(' -').upper()
         r = self.session.get(url).json()
@@ -136,8 +141,9 @@ class Binance:
 
         for symbol in r["symbols"]:
             if symbol["status"] == "TRADING" and 'LIMIT' in symbol["orderTypes"]:
-                pares.append(symbol['symbol'])
+                pares.append(symbol['baseAsset'] + '-' + symbol['quoteAsset'])
         
+        self.pares = pares.copy()
         return {'pares': pares, 'n_pares': len(pares)}
     def cancel_all_orders(self):
         return self.client.cancel_all_open_orders()
@@ -151,40 +157,59 @@ class BinancePricesMonitor:
     def __init__(self):
         self.base_url = 'wss://stream.binance.com:9443/ws/'
         self.moedas_order_book = {} # ADA/USDT => [menor preco de compra, maior preco de venda]
-        self.pares = ['solusdt', 'adausdt', 'xrpusdt'] # apenas para teste, aqui sera dinamico
+        self.pares = []
+        self.isOn = False
+    def get_order_book(self, par: str):
+        # print(self.moedas_order_book, '=>', par.lower().replace('-',''), '=>', self.moedas_order_book.get(par.lower().replace('-','')))
+        return self.moedas_order_book.get(par.lower().replace('-',''))
     def streamNameGenerator(self):
         name = ''
         for i in range(randint(8, 32)):
             name += ascii_letters[randint(0, len(ascii_letters)-1)]
         return name
     def on_open(self, ws: WebSocketApp):
-        print('==> WS Aberto <==')
-        pares2send = { "method": "SUBSCRIBE", "params": [ f"{par.lower()}@depth@100ms" for par in self.pares ], "id": 1 }
+        pass#print('==> WS Aberto <==')
+        pares2send = { "method": "SUBSCRIBE", "params": [ f"{par.lower().replace('-','')}@depth@1000ms" for par in self.pares ], "id": 1 }
 
         ws.send(dumps(pares2send))
+        self.isOn = True
     def on_message(self, ws: WebSocketApp, message: str):
         message = loads(message)
         if message["e"] == "depthUpdate":
             # order book
-            symbol = message['s']
+            symbol = message['s'].lower()
             try:
-                bid = [float(c) for c in message["b"][0]] # Oferta de Compra
-                ask = [float(c) for c in message["a"][0]] # Oferta de Venda
+                bid = [float(c) for c in message["b"][0]] # Oferta de Compra - PRECO DE QUEM ESTA VENDO
             except:
                 bid = [0,0]
+            try:
+                ask = [float(c) for c in message["a"][0]] # Oferta de Venda - PRECO DE QUEM ESTA QUERENDO COMPRAR
+            except Exception as e:
                 ask = [0,0]
 
-            print(f'[{symbol}] :: ASK => {ask} | BID: {bid} | QUER COMPRAR > QUER VENDER: {bid[0] > ask[0]}')
+            #print(f'[BINANCE] ===> [{symbol}] :: ASK => {ask} | BID: {bid} | QUER COMPRAR > QUER VENDER: {bid[0] > ask[0]}')
             self.moedas_order_book[symbol] = [bid, ask]
         else:
-            print('[message]:', message)
+            pass#print('[BINANCE] ===> [message]:', message)
     def on_close(self, _: WebSocketApp):
-        print('[!close]')
+        pass#print('[BINANCE] ===> [!close]')
+        if self.isOn:
+            self.start()
     def on_error(self, _: WebSocketApp, error: str):
-        print('[!error]:', error)
+        pass#print('[BINANCE] ===> [!error]:', error)
     def start(self):
-        ws = WebSocketApp(self.base_url + self.streamNameGenerator(), on_open=self.on_open, on_close=self.on_close, on_error=self.on_error, on_message=self.on_message)
-        ws.run_forever()
+        if self.isOn: return None
+        
+        self.ws = WebSocketApp(self.base_url + self.streamNameGenerator(), on_open=self.on_open, on_close=self.on_close, on_error=self.on_error, on_message=self.on_message)
+        #ws.run_forever()
+        Thread(target=self.ws.run_forever, args=()).start()
+    def stop(self):
+        self.isOn = False
+        try:
+            self.ws.close()
+        except:
+            pass
+        
 
 
 

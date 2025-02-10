@@ -170,40 +170,6 @@
       </main>
     </div>
 </div>
-
-<!-- modal para trabalhar com as respostas -->
-<div class="modal fade" id="modalRespostas" tabindex="-1" aria-labelledby="modalRespostasLabel" aria-hidden="true">
-<div class="modal-dialog">
-    <form method="post" action="/listarMensagens" class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="modalRespostasLabel">Mensagens de "<span id="nomeUserModal"></span>"</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
-            <div class="mt-2">
-                <table class="table">
-                    <thead>
-                        <th width="50%">Recebida</th>
-                        <th>Resposta</th>
-                    </thead>
-                    <tbody id="modal">
-                        <tr>
-                            <td>Carregando...</td>
-                            <td>Carregando...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="modal-footer">
-          <input type="hidden" name="user" id="userModal">
-          <input type="hidden" name="password" id="passwordModal">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-            <button class="btn btn-primary" type="submit" id="btnModalSave">Salvar</button>
-        </div>
-    </form>
-</div>
-</div>
   
 <script src="/static/js/bootstrap.bundle.min.js"></script>
 <script src="/static/js/jquery.js"></script>
