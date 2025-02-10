@@ -95,7 +95,7 @@ class BitruePricesMonitor:
         
         for par in self.pares:
             pares2send['params']['cb_id'] = par.lower()
-            pares2send['params']['channel'] = f'market_{par.lower().replace('-','')}_simple_depth_step0'
+            pares2send['params']['channel'] = f"market_{par.lower().replace('-','')}_simple_depth_step0"
             ws.send(dumps(pares2send))
             
         self.isOn = True
